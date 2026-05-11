@@ -1,6 +1,6 @@
-# ApiSIP
+# SIP (Sistema Institucional de Practicas)
 
-ApiSIP es una aplicación desarrollada con **Spring Boot 3** diseñada para la gestión de procesos administrativos, servicios y seguimiento de documentos. El sistema integra autenticación segura, generación de documentos PDF y un sistema de notificaciones por correo electrónico.
+SIP es una aplicación desarrollada con **Spring Boot 3** diseñada para la gestión de procesos administrativos, servicios y seguimiento de documentos. El sistema integra autenticación segura, generación de documentos PDF y un sistema de notificaciones por correo electrónico.
 
 ## Stack Tecnológico
 
