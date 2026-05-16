@@ -1,7 +1,6 @@
 package com.upiicsa.ApiSIP.Service.Infrastructure;
 
-import com.upiicsa.ApiSIP.Exception.BusinessException;
-import com.upiicsa.ApiSIP.Model.Enum.ErrorCode;
+import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -10,12 +9,14 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class EmailService {
+
 
     @Value("${SPRING_EMAIL_USERNAME}")
     private String email;
 
-    private JavaMailSender mailSender;
+    private final JavaMailSender mailSender;
 
     public EmailService(JavaMailSender mailSender) {
         this.mailSender = mailSender;
@@ -23,8 +24,20 @@ public class EmailService {
 
     @Async("emailExecutor")
     public void sendResetEmail(String toEmail, String resetUrl) {
-        SimpleMailMessage message = new SimpleMailMessage();
+        log.info("Iniciando envío asíncrono de restablecimiento de contraseña hacia: {}", toEmail);
 
+        SimpleMailMessage message = getMailMessage(toEmail, resetUrl);
+
+        try {
+            mailSender.send(message);
+            log.info("Correo de restablecimiento enviado exitosamente a {}", toEmail);
+        } catch (Exception e) {
+            log.error("FALLO CRÍTICO al enviar correo de restablecimiento a {}. Motivo: {}", toEmail, e.getMessage(), e);
+        }
+    }
+
+    private @NonNull SimpleMailMessage getMailMessage(String toEmail, String resetUrl) {
+        SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(email);
         message.setTo(toEmail);
         message.setSubject("Solicitud de Restablecimiento de Contraseña");
@@ -37,31 +50,25 @@ public class EmailService {
                 + "Atentamente,\n"
                 + "Tu equipo de Soporte.";
         message.setText(emailContent);
-
-        try {
-            mailSender.send(message);
-        } catch (Exception e) {
-            throw new BusinessException(ErrorCode.EMAIL_SEND_FAILED);
-        }
+        return message;
     }
 
     @Async("emailExecutor")
     public void sendConfirmationCode(String toEmail, String code) {
+        log.info("Iniciando envío asíncrono de código de verificación hacia: {}", toEmail);
+
         SimpleMailMessage message = getSimpleMailMessage(toEmail, code);
-        System.out.println(">>> [ASYNC] Intentando enviar a: " + toEmail);
+
         try {
             mailSender.send(message);
-            System.out.println(">>> [ASYNC] Correo enviado exitosamente");
+            log.info("Correo de verificación enviado exitosamente a {}", toEmail);
         } catch (Exception e) {
-            //throw new BusinessException(ErrorCode.EMAIL_SEND_FAILED);
-            System.err.println(">>> [ASYNC] ERROR al enviar: " + e.getMessage());
-            e.printStackTrace();
+            log.error("FALLO CRÍTICO al enviar código de verificación a {}. Motivo: {}", toEmail, e.getMessage(), e);
         }
     }
 
     private @NonNull SimpleMailMessage getSimpleMailMessage(String toEmail, String code) {
         SimpleMailMessage message = new SimpleMailMessage();
-
         message.setFrom(email);
         message.setTo(toEmail);
         message.setSubject("Verificación de Correo Electrónico");

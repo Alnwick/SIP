@@ -2,6 +2,7 @@ package com.upiicsa.ApiSIP.Controller;
 
 import com.upiicsa.ApiSIP.Dto.Document.DocumentStatusDto;
 import com.upiicsa.ApiSIP.Dto.Document.ReviewDocumentDto;
+import com.upiicsa.ApiSIP.Dto.Document.UpdateReviewDto;
 import com.upiicsa.ApiSIP.Service.Document.DocumentService;
 import com.upiicsa.ApiSIP.Service.Document.ReviewDocumentService;
 import com.upiicsa.ApiSIP.Utils.AuthHelper;
@@ -59,10 +60,16 @@ public class DocumentController {
     @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'OPERADOR')")
     public ResponseEntity<Boolean> reviewedDocument(@RequestParam String enrollment,
                                                     @RequestBody List<ReviewDocumentDto> reviewsDto) {
-        Integer userId = AuthHelper.getAuthenticatedUserId();
-        reviewService.performReview(enrollment, reviewsDto, userId);
+        reviewService.performReview(enrollment, reviewsDto, getUserId());
 
         return ResponseEntity.ok(true);
+    }
+
+    @PatchMapping("/review")
+    public ResponseEntity<Boolean> patchReview(@RequestParam String enrollment,
+                                               @RequestBody UpdateReviewDto updateDto){
+
+        reviewService.updateReview(enrollment, updateDto, getUserId());
     }
 
     private Integer getUserId(){
