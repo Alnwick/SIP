@@ -74,10 +74,12 @@ public class PasswordResetService {
     @Transactional
     public void changePassword(Integer userId, String newPassword) {
         UserSIP user =  userService.getUserById(userId);
-
+        System.out.println(">>> newPassword:" + newPassword);
         if(newPassword.equals(user.getPassword())){
+            System.out.println(">>> Mismath");
             throw new BusinessException(ErrorCode.PASSWORD_MISMATCH);
         }
+        System.out.println(">>> Password changed");
         userService.updatePassword(user, newPassword);
     }
 }
