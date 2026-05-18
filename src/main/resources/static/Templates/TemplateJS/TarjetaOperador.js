@@ -1,27 +1,26 @@
 function TarjetaOperador(doc, options = {}) {
-    
+
     const {
         index = Math.floor(Math.random() * 1000),
         docPath = '',
-        mapaNombres = {}, 
-        extraClass = '',  
+        mapaNombres = {},
+        extraClass = '',
         onView = (url, name) => console.log("Visualizando:", url),
     } = options;
 
-    // Lógica de Negocio
     const isRevisado = doc.status === 'CORRECTO';
     const isIncorrecto = doc.status === 'INCORRECTO';
     const hasFile = doc.fileName && doc.fileName.trim() !== '';
     const isSinDoc = !hasFile || doc.status === 'SIN_CARGAR';
-    const isCargado = (doc.status === 'PENDIENTE' /*|| isIncorrecto*/) && hasFile;
-    
+    const isCargado = (doc.status === 'PENDIENTE' || doc.status === 'INCORRECTO') && hasFile;
+
     const esCartaPresentacion = doc.typeCode === 'CARTA_PRESENTACION';
-    
+
     const fileUrl = hasFile ? `${docPath}${doc.fileName}` : '';
-    const uploadDateStr = doc.uploadDate 
-        ? new Date(doc.uploadDate).toLocaleString('es-MX') 
+    const uploadDateStr = doc.uploadDate
+        ? new Date(doc.uploadDate).toLocaleString('es-MX')
         : "Sin archivo cargado";
-    
+
     const nombreAMostrar = mapaNombres[doc.typeCode] || doc.typeCode;
     const typeCodeSeguro = doc.typeCode || 'DOC_SIN_NOMBRE';
     const uniqueId = typeCodeSeguro.replace(/\s+/g, '_') + '_' + index;
@@ -35,8 +34,8 @@ function TarjetaOperador(doc, options = {}) {
     const card = document.createElement('div');
     card.className = cardClass;
     card.setAttribute('data-typecode', doc.typeCode);
+    card.setAttribute('data-index', index);
 
-    
     if (esCartaPresentacion) {
         card.innerHTML = `
             <div class="doc-header">
@@ -68,7 +67,7 @@ function TarjetaOperador(doc, options = {}) {
                 </div>
                 <div style="display:flex; gap:0.8rem; align-items:center;">
                     ${isRevisado ? '<span class="locked-badge">Correcto</span>' : ''}
-                    ${isIncorrecto ? '<span class="locked-badge" style="background:var(--error);">Corrección Solicitada</span>' : ''}
+                    ${isIncorrecto ? '<span class="locked-badge" style="background:var(--error, #dc3545);">Corrección Solicitada</span>' : ''}
                     
                     <button class="btn-view" ${!hasFile ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''}>
                         ${hasFile ? 'Ver Archivo' : 'Sin Archivo'}
@@ -79,11 +78,11 @@ function TarjetaOperador(doc, options = {}) {
             ${isCargado ? `
                 <div class="status-actions">
                     <label class="action-label opt-ok">
-                        <input type="radio" name="st-${uniqueId}" value="REVISADO_CORRECTO" ${doc.status === 'REVISADO_CORRECTO' ? 'checked' : ''}>
+                        <input type="radio" name="st-${uniqueId}" value="REVISADO_CORRECTO" ${doc.status === 'CORRECTO' ? 'checked' : ''}>
                         Correcto
                     </label>
                     <label class="action-label opt-err">
-                        <input type="radio" name="st-${uniqueId}" value="REVISADO_INCORRECTO" ${doc.status === 'REVISADO_INCORRECTO' ? 'checked' : ''}>
+                        <input type="radio" name="st-${uniqueId}" value="REVISADO_INCORRECTO" ${doc.status === 'INCORRECTO' ? 'checked' : ''}>
                         Incorrecto
                     </label>
                 </div>
@@ -94,7 +93,6 @@ function TarjetaOperador(doc, options = {}) {
         `;
     }
 
-    // Evento común para el botón de ver
     if (hasFile) {
         const btnView = card.querySelector('.btn-view');
         if (btnView) {
@@ -105,17 +103,23 @@ function TarjetaOperador(doc, options = {}) {
         }
     }
 
-    //sincronizar boton de guardar con el renderizado de las tarjetas
+    const txtArea = card.querySelector('.comment-area');
+    if (txtArea) {
+        txtArea.addEventListener('input', () => {
+            txtArea.style.borderColor = '';
+            txtArea.style.backgroundColor = '';
+        });
+    }
+
     if (esCartaPresentacion) {
         const btnSave = card.querySelector('#btn-global-save');
         if (btnSave) {
             btnSave.addEventListener('click', (e) => {
                 e.preventDefault();
-                handleGlobalUpload(); 
+                handleGlobalUpload();
             });
         }
-        
-        // Bonus: Mostrar el nombre del archivo seleccionado
+
         const fileInput = card.querySelector('#file-CP');
         const nameLabel = card.querySelector('#name-CP');
         if (fileInput && nameLabel) {
@@ -131,7 +135,7 @@ function TarjetaOperador(doc, options = {}) {
 
 async function handleGlobalUpload() {
     const urlParams = new URLSearchParams(window.location.search);
-    const enrollment = urlParams.get('enrollment'); 
+    const enrollment = urlParams.get('enrollment');
 
     if (!enrollment) {
         showModal('Error', 'No se detectó la boleta del alumno.', 'error');
@@ -155,9 +159,9 @@ async function handleGlobalUpload() {
 
     for (const item of inputsConArchivos) {
         const formData = new FormData();
-        
+
         formData.append('file', item.input.files[0]);
-        formData.append('enrollment', enrollment); 
+        formData.append('enrollment', enrollment);
 
         try {
             const response = await fetch(API_OPERADOR_UPLOAD, {
@@ -179,4 +183,45 @@ async function handleGlobalUpload() {
             btn.textContent = "Finalizar Revisión";
         }
     }
+}
+
+function validarComentariosOperador() {
+    const tarjetas = document.querySelectorAll('.doc-review-card');
+    let todoValido = true;
+
+    tarjetas.forEach(tarjeta => {
+        const typeCode = tarjeta.getAttribute('data-typecode');
+        if (!typeCode || typeCode === 'CARTA_PRESENTACION') return;
+
+        const index = tarjeta.getAttribute('data-index');
+        const uniqueId = typeCode.replace(/\s+/g, '_') + '_' + index;
+
+        const radioIncorrecto = tarjeta.querySelector(`input[name="st-${uniqueId}"][value="REVISADO_INCORRECTO"]`);
+        const textarea = document.getElementById(`comm-${uniqueId}`);
+
+        if (radioIncorrecto && radioIncorrecto.checked) {
+            if (!textarea || textarea.value.trim() === '') {
+                todoValido = false;
+                if (textarea) {
+                    textarea.style.borderColor = 'var(--error, #dc3545)';
+                    textarea.style.backgroundColor = 'var(--bg-alternative)';
+                }
+            } else {
+                if (textarea) {
+                    textarea.style.borderColor = '';
+                    textarea.style.backgroundColor = '';
+                }
+            }
+        }
+    });
+
+    if (!todoValido) {
+        showModal(
+            'Comentarios Obligatorios',
+            'Si marcas un documento como "Incorrecto", debes escribir una observación/explicando el motivo del rechazo al alumno.',
+            'error'
+        );
+    }
+
+    return todoValido;
 }

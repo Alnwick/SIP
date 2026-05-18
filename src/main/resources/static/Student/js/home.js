@@ -1,13 +1,16 @@
-const API_STATUS = '/students/process-status';//get
-const API_LOGOUT = '/auth/logout';//post
-const API_DOCS_STATUS = '/documents/my-status';//get
-const PHASES = ["Registrado", "Doc Inicial", "Cartas", "Doc Término", "Liberación" ];// solo para vista
+const API_STATUS = '/students/process-status'; // GET
+const API_LOGOUT = '/auth/logout'; // POST
+const API_DOCS_STATUS = '/documents/my-status'; // GET
+
+// Fases utilizadas exclusivamente para la representación visual en la interfaz de usuario
+const PHASES = ["Registrado", "Doc Inicial", "Cartas", "Doc Término", "Liberación"];
 
 document.addEventListener('DOMContentLoaded', () => {
     renderUniversalHeader('students');
     loadData();
     renderUniversalFooter();
 });
+
 async function loadData() {
     let stagesData = [];
     let docsData = [];
@@ -18,6 +21,8 @@ async function loadData() {
         const urlDocs = `${API_DOCS_STATUS}?processStatus=DOC_INICIAL`;
         const urlCarts = `${API_DOCS_STATUS}?processStatus=CARTAS`;
         const urlTermino = `${API_DOCS_STATUS}?processStatus=DOC_FINAL`;
+
+        // Ejecución concurrente de peticiones para agilizar la carga del dashboard del estudiante
         const [respStatus, respDocs, respCarts, respTermino] = await Promise.all([
             fetch(API_STATUS),
             fetch(urlDocs),
@@ -30,9 +35,9 @@ async function loadData() {
         if (respCarts.ok) docsCarts = await respCarts.json();
         if (respTermino.ok) docsTermino = await respTermino.json();
 
-        console.log("Docs inicio:", docsData); 
-        console.log("Docs Cartas:", docsCarts); 
-        console.log("Docs Término:", docsTermino); 
+        console.log("Docs inicio:", docsData);
+        console.log("Docs Cartas:", docsCarts);
+        console.log("Docs Término:", docsTermino);
     } catch (e) {
         console.warn("Error cargando datos", e);
     }
@@ -44,16 +49,17 @@ function renderProgress(apiData, docsData, docsCarts, docsTermino) {
     const stepper = document.getElementById('main-stepper');
     if (!stepper) return;
 
+    // Identificadores de documentos obligatorios parametrizados por fase según la normativa interna
     const docsObligatorios = ["CEDULA_REGISTRO", "CONSTANCIA_IMSS", "CAPTURA_EMPRESA", "CAPTURA_ALUMNO", "HORARIO"];
-    const docsCartsFase2 = ["CARTA_ACEPTACION"/*",CARTA_PRESENTACION"*/ ];
+    const docsCartsFase2 = ["CARTA_ACEPTACION"];
     const docsTerminoFase3 = ["HOJAS_ASISTENCIA", "INFORMES_MENSUALES", "CARTA_TERMINO"];
 
+    // Evaluación de banderas para identificar si el estudiante ha iniciado la carga en cada sección
     const haSubidoAlgo = docsData && docsData.some(doc => doc.fileName !== null && doc.status !== 'SIN_CARGA');
     const haSubidoAlgoCarts = docsCarts && docsCartsFase2.some(doc => doc.fileName !== null && doc.status !== 'SIN_CARGA');
     const haSubidoAlgoTermino = docsTermino && docsTerminoFase3.some(doc => doc.fileName !== null && doc.status !== 'SIN_CARGA');
 
-    let nuevoStatusCalculado = "DOC_INICIAL";
-    // ===================== Aprobado
+    // Comprobación de aprobación unánime por fase (estatus "CORRECTO" en cada archivo requerido)
     const todoAprobadoReal = docsObligatorios.every(type => {
         const doc = docsData.find(d => d.typeCode === type);
         return doc && doc.status === 'CORRECTO';
@@ -69,7 +75,7 @@ function renderProgress(apiData, docsData, docsCarts, docsTermino) {
         return doc && doc.status === 'CORRECTO';
     });
 
-    // ================== falta subir
+    // Comprobación de archivos faltantes o en estado nulo por fase
     const faltaSubirArchivo = docsObligatorios.some(type => {
         const doc = docsData.find(d => d.typeCode === type);
         return !doc || doc.status === 'SIN_CARGA' || !doc.fileName;
@@ -83,53 +89,38 @@ function renderProgress(apiData, docsData, docsCarts, docsTermino) {
         return !doc || doc.status === 'SIN_CARGA' || !doc.fileName;
     });
 
-    // ================== En revisión
-    const estaEnRevision = !faltaSubirArchivo && !todoAprobadoReal;
-    const estaEnRevisionCarts = !faltaSubirArchivoCarts && !todoAprobadoRealCarts;
-    const estaEnRevisionTermino = !faltaSubirArchivoTermino && !todoAprobadoRealTermino;
-
-
+    // Mapeo dinámico del Stepper basado en el estado cronológico de las fases del backend
     stepper.innerHTML = PHASES.map((name, idx) => {
         const data = apiData[idx] || {};
         let current = data.isCurrent || false;
-        let done = data.date && data.date !== "" && data.date !== "-"; 
+
+        // Una fase se considera completada de forma nativa si tiene una fecha registrada válida
+        let done = data.date && data.date !== "" && data.date !== "-";
         let displayDate = data.date;
         let customStatus = "";
-        const fechaValida = (displayDate && displayDate !== "-") ? displayDate : new Date().toISOString();
 
+        // Extracción explícita de la etapa activa reportada por el motor de procesos backend
         const etapaActivaBackend = apiData.find(d => d.isCurrent)?.stageName || "";
 
-        // --- LÓGICA PARA FASE 0 (Registrado) ---
+        // --- LÓGICA PARA FASE 0 (REGISTRADO) ---
         if (idx === 0) {
-        if (etapaActivaBackend !== "REGISTRADO") { // Si ya no es la actual, es porque ya pasó
-            done = true;
-            current = false;
-        } else {
-            done = false;
-            current = true;
-            customStatus = `Inició: ${fmt(fechaValida)}`;
-        }
-    }
-
-    // --- LÓGICA PARA FASE 1 (Doc Inicial) ---
-    
-        if (idx === 0) {
-            if (haSubidoAlgo) {
+            if (etapaActivaBackend !== "REGISTRADO") {
+                // Si el proceso ya avanzó de etapa, por defecto el registro inicial está concluido
                 done = true;
                 current = false;
             } else {
                 done = false;
                 current = true;
-                customStatus = `Inició: ${fmt(fechaValida)}`;
+                customStatus = `Inició: ${fmt(displayDate)}`;
             }
         }
 
-        // --- LÓGICA PARA FASE 1 (Doc Inicial) ---
+        // --- LÓGICA PARA FASE 1 (DOC_INICIAL) ---
         if (idx === 1) {
             if (todoAprobadoReal) {
                 done = true;
                 current = false;
-            } else if (haSubidoAlgo) {
+            } else if (etapaActivaBackend === "DOC_INICIAL" || haSubidoAlgo) {
                 done = false;
                 current = true;
                 customStatus = faltaSubirArchivo ? "Documentación incompleta" : "Revisando...";
@@ -139,37 +130,46 @@ function renderProgress(apiData, docsData, docsCarts, docsTermino) {
             }
         }
 
-        // --- FASE 2 desbloquear Cartas ---
+        // --- LÓGICA PARA FASE 2 (CARTAS) ---
         if (idx === 2) {
             if (todoAprobadoRealCarts) {
-                done = true; 
+                done = true;
                 current = false;
+                // Fallback de contingencia visual en caso de requerir la fecha de la última actualización del archivo
                 const ultimaCarta = docsCarts.find(d => d.typeCode === "CARTA_ACEPTACION");
-                displayDate = ultimaCarta ? ultimaCarta.uploadDate : displayDate;
-            } else if (todoAprobadoReal) {
+                if (!displayDate || displayDate === "-") {
+                    displayDate = ultimaCarta ? ultimaCarta.uploadDate : displayDate;
+                }
+            } else if (todoAprobadoReal || etapaActivaBackend === "CARTAS") {
                 done = false;
                 current = true;
                 if (haSubidoAlgoCarts) {
                     customStatus = faltaSubirArchivoCarts ? "Documentación incompleta" : "Revisando...";
+                } else {
+                    customStatus = "Esperando documentos";
                 }
             } else {
                 done = false;
                 current = false;
             }
         }
-        //faase 3 desbloquear doc termino
-         
+
+        // --- LÓGICA PARA FASE 3 (DOC_FINAL) ---
         if (idx === 3) {
             if (todoAprobadoRealTermino) {
-                done = true; 
+                done = true;
                 current = false;
                 const ultimoTermino = docsTermino.find(d => d.typeCode === "CARTA_TERMINO");
-                displayDate = ultimoTermino ? ultimoTermino.uploadDate : displayDate;
-            } else if (todoAprobadoRealCarts) {
+                if (!displayDate || displayDate === "-") {
+                    displayDate = ultimoTermino ? ultimoTermino.uploadDate : displayDate;
+                }
+            } else if (todoAprobadoRealCarts || etapaActivaBackend === "DOC_FINAL") {
                 done = false;
                 current = true;
                 if (haSubidoAlgoTermino) {
                     customStatus = faltaSubirArchivoTermino ? "Documentación incompleta" : "Revisando...";
+                } else {
+                    customStatus = "Esperando reportes";
                 }
             } else {
                 done = false;
@@ -177,13 +177,25 @@ function renderProgress(apiData, docsData, docsCarts, docsTermino) {
             }
         }
 
-        if(idx === 4 && todoAprobadoRealTermino){
-            done = true; 
-            current = false; 
+        // --- LÓGICA PARA FASE 4 (LIBERACIÓN) ---
+        if (idx === 4) {
+            if (todoAprobadoRealTermino || etapaActivaBackend === "LIBERADO") {
+                // Si el backend reporta la fase activa de liberación o la anterior concluyó al 100%
+                if (data.date && data.date !== "-") {
+                    done = true;
+                    current = false;
+                } else {
+                    done = false;
+                    current = true;
+                    customStatus = "Proceso de firmas final";
+                }
+            } else {
+                done = false;
+                current = false;
+            }
         }
 
-
-
+        // Determinación de la clase de estilo CSS según el estado de la iteración actual
         let statusClass = done ? 'completed' : (current ? 'active' : '');
 
         return `
@@ -194,7 +206,7 @@ function renderProgress(apiData, docsData, docsCarts, docsTermino) {
                     <div class="date-container">
                         <span class="date-badge">
                             ${done ? 'Terminó: ' + fmt(displayDate) :
-                             (current ? (customStatus || 'En progreso') : '—')}
+            (current ? (customStatus || 'En progreso') : '—')}
                         </span>
                     </div>
                 </div>
@@ -202,19 +214,10 @@ function renderProgress(apiData, docsData, docsCarts, docsTermino) {
         `;
     }).join('');
 
-    // if (todoAprobadoRealTermino) {
-    //     nuevoStatusCalculado = 'LIBERACION';
-    // } else if (todoAprobadoRealCarts) {
-    //     nuevoStatusCalculado = 'DOC_FINAL';
-    // } else if (todoAprobadoReal) {
-    //     nuevoStatusCalculado = 'CARTAS';
-    // }
-
-    // localStorage.setItem('currentProcessStatus', nuevoStatusCalculado);
+    // Actualización delegada de las tarjetas del Dashboard basadas en la sincronización de las fases del alumno
     actualizarTarjetas(todoAprobadoReal, todoAprobadoRealCarts, todoAprobadoRealTermino);
-    console.log(todoAprobadoReal);
-    console.log(todoAprobadoRealCarts);
-    console.log(todoAprobadoRealTermino);
+
+    console.log("Validaciones de flujo:", { todoAprobadoReal, todoAprobadoRealCarts, todoAprobadoRealTermino });
 }
 
 function actualizarTarjetas(docsInicialesOK, cartasOK, terminoOK) {
@@ -230,7 +233,7 @@ function actualizarTarjetas(docsInicialesOK, cartasOK, terminoOK) {
             id: 'card-seguimiento',
             link: 'registroseguimiento.html',
             tag: 'lock-tag-seguimiento',
-            puedeAbrir: cartasOK, 
+            puedeAbrir: cartasOK,
             mensaje: "Primero deben Aceptar tus Cartas."
         }
     ];
@@ -241,14 +244,14 @@ function actualizarTarjetas(docsInicialesOK, cartasOK, terminoOK) {
         if (!card) return;
 
         if (item.puedeAbrir) {
-            // DESBLOQUEADO
+            // Configuración del elemento DOM en estado DESBLOQUEADO
             card.classList.remove('locked');
             if (lock) lock.style.display = 'none';
             card.onclick = () => window.location.href = item.link;
             card.style.cursor = "pointer";
             card.style.opacity = "1";
         } else {
-            // BLOQUEADO
+            // Configuración del elemento DOM en estado BLOQUEADO
             card.classList.add('locked');
             if (lock) lock.style.display = 'flex';
             card.style.cursor = "not-allowed";
@@ -262,8 +265,30 @@ function actualizarTarjetas(docsInicialesOK, cartasOK, terminoOK) {
 
 function fmt(d) {
     try {
-        const date = new Date(d);
+        if (!d || d === "-") return "—";
+
+        // Validamos si la fecha viene en formato estricto YYYY-MM-DD (ej: "2026-04-22")
+        const regexFechaCorta = /^\d{4}-\d{2}-\d{2}$/;
+
+        let date;
+        if (regexFechaCorta.test(d)) {
+            // Dividimos los componentes numéricos de la cadena
+            const [year, month, day] = d.split('-').map(Number);
+            // El objeto Date de JS maneja los meses basados en índice 0 (Enero = 0, Abril = 3)
+            date = new Date(year, month - 1, day);
+        } else {
+            // Si viene con timestamp completo o formato ISO complejo, usamos el parseo normal
+            date = new Date(d);
+        }
+
         if (isNaN(date.getTime())) return d;
-        return date.toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' });
-    } catch (e) { return d; }
+
+        return date.toLocaleDateString('es-MX', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        });
+    } catch (e) {
+        return d;
+    }
 }

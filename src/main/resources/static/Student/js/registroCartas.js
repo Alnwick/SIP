@@ -34,7 +34,7 @@ function initUI(docsData = []) {
         const dataDoc = docsData.find(d => d.typeCode === doc.typeCode) || {};
         
         
-        
+
         return crearTarjetaDocumento(doc, dataDoc, "", true, statusPresentacion);
     }).join('');
 

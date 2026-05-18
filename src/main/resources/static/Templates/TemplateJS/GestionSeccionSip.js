@@ -1,4 +1,3 @@
-
 const urlParams = new URLSearchParams(window.location.search);
 const enrollment = urlParams.get('enrollment');
 
@@ -24,7 +23,6 @@ async function InicializarSeccionRevision(config) {
             SeccionInfoEstudiante(enrollment, 'DOC_FINAL')
         ]);
 
-        
         let dataActual;
         if (statusSeccion === 'DOC_INICIAL') dataActual = dataInicial;
         else if (statusSeccion === 'CARTAS') dataActual = dataCartas;
@@ -32,17 +30,15 @@ async function InicializarSeccionRevision(config) {
 
         if (dataActual && dataActual.documents) {
             currentDocuments = dataActual.documents;
-            
-            
+
             renderDocumentsGenerico(currentDocuments, mapaNombres, contenedorListaId);
-            
-            //Pasamos el objeto con TODAS las etapas a la navegación
+
             gestionarNavegacionRevision(statusSeccion, {
                 inicial: dataInicial.documents || [],
                 cartas: dataCartas.documents || [],
                 termino: dataTermino.documents || []
             });
-      
+
             if (proximaEtapa) {
                 proximaEtapa.functionVerificar(currentDocuments, proximaEtapa.idBoton);
             }
@@ -55,18 +51,14 @@ async function InicializarSeccionRevision(config) {
     }
 }
 
-// Función de renderizado que usa el mapa de nombres inyectado
 function renderDocumentsGenerico(docs, mapa, containerId) {
     const container = document.getElementById(containerId);
 
-   // console.log("Contenedor encontrado:", container); 
-    //console.log("Documentos a renderizar:", docs);    
-    
     if (!container) return;
     container.innerHTML = '';
 
     const fragment = document.createDocumentFragment();
-    
+
     docs.forEach((doc, index) => {
         const tipoKey = doc.typeName || doc.typeCode;
         const nombreVisible = mapa[tipoKey] || tipoKey;
@@ -87,10 +79,9 @@ function renderDocumentsGenerico(docs, mapa, containerId) {
         });
         fragment.appendChild(tarjeta);
     });
-    
+
     container.appendChild(fragment);
 }
-
 
 function setupActionButtonsGenerico(endpoint) {
     const btnFinalize = document.getElementById('btn-finalize-review');
@@ -98,6 +89,10 @@ function setupActionButtonsGenerico(endpoint) {
 
     btnFinalize.onclick = async () => {
         if (!currentDocuments || currentDocuments.length === 0) return;
+
+        if (!validarComentariosOperador()) {
+            return;
+        }
 
         const reviews = [];
         currentDocuments.forEach((doc, index) => {
@@ -134,7 +129,7 @@ function setupActionButtonsGenerico(endpoint) {
 
             if (res.ok) {
                 showModal("¡Listo!", "Se han enviado las correcciones al alumno.", "success");
-                setTimeout(() => location.reload(), 1500); 
+                setTimeout(() => location.reload(), 1500);
             } else {
                 throw new Error("Error en el servidor");
             }

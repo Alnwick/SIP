@@ -1,4 +1,4 @@
-@import url('/global.css');
+@import url('../../global.css');
 header {
     background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
     padding: 0.7rem 3rem;

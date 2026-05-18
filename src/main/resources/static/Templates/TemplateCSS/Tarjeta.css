@@ -1,4 +1,4 @@
-@import url('../global.css');
+@import url('../../global.css');
 
 /* Contenedor relativo para que el bloqueo se ajuste a la tarjeta */
 .doc-card { position: relative; }

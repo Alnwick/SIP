@@ -235,6 +235,29 @@ function validarCampo(inputElement) {
         inputElement.classList.add('input-error');
         return false;
     }
+    if (inputElement.id === 'companyEmail') {
+        // Expresión regular estándar para validar un correo electrónico completo
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!emailRegex.test(inputElement.value.trim())) {
+            if (errorElement) errorElement.remove();
+
+            errorElement = document.createElement('small');
+            errorElement.id = errorId;
+            errorElement.className = 'error-text';
+
+            const svgIcon = `
+            <svg style="width:16px; height:16px; vertical-align:middle; margin-right:4px;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3Z"/>
+            </svg>`;
+
+            errorElement.innerHTML = `${svgIcon} Por favor, ingresa un correo electrónico válido (debe incluir @ y un dominio)`;
+            inputElement.parentNode.insertBefore(errorElement, inputElement.nextSibling);
+
+            inputElement.classList.add('input-error');
+            return false;
+        }
+    }
 
     if (errorElement) {
         errorElement.remove();

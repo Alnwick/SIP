@@ -1,4 +1,4 @@
-@import url('/global.css');
+@import url('../../global.css');
 .review-panel { display: flex; flex-direction: column; gap: 1.2rem; }
 
 

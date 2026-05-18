@@ -1,4 +1,4 @@
-@import url('/global.css');
+@import url('../../global.css');
 .doc-review-card {
     background: var(--white);
     border-radius: 1.2rem;

@@ -1,4 +1,4 @@
-@import url('/global.css');
+@import url('../../global.css');
 #global-modal {
     display: none;
     position: fixed;
@@ -14,11 +14,19 @@
 
 .modal-content {
     background: var(--white);
-    padding: 10px;
+    padding: 20px;
     border-radius: 12px;
     text-align: center;
-    width: 500px;
-    height:250px;
+    min-width: 500px;
+    max-width: 90%;
+    min-height: 250px;
+    height: auto;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
     box-shadow: 0 4px 6px var(--shadow-brand-overlay);
 }
 /*#modal-icon{
