@@ -41,6 +41,11 @@ public class UserService {
                 user.getEmail(),null);
     }
 
+    @Transactional
+    public void createUser(UserSIP user){
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+    }
 
     @Transactional
     public void updatePassword(UserSIP user, String password) {
