@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prácticas Profesionales - Panel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../master.css">
+    <link rel="stylesheet" href="../Operative/css/home.css">
+</head>
+<body>
+
+<header></header> <script src="../Templates/TemplateJS/Header.js"></script>
+
+<div class="container">
+
+    <!-- Filtros de Carrera -->
+    <div class="nav-section">
+        <div class="nav-title">Carreras Disponibles</div>
+        <div class="items-container" id="careerContainer">
+            <div class="selectable-item active" data-acronym="all">Todas las carreras</div>
+        </div>
+    </div>
+
+    <!-- Filtros de Plan -->
+    <div class="nav-section">
+        <div class="nav-title">Planes de Estudio</div>
+        <div class="items-container" id="planContainer">
+            <div class="selectable-item active" data-code="all">Todos los planes</div>
+        </div>
+    </div>
+
+    <div class="info-header">
+        <h2 id="currentTitle">Listado de Alumnos</h2>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Buscar por nombre o boleta...">
+        </div>
+    </div>
+
+    <!-- Estadísticas -->
+    <div class="stats-grid" id="statsGrid">
+        <!-- Dinámico JS -->
+    </div>
+
+    <!-- Tabla de Resultados -->
+    <div class="table-wrapper">
+        <table>
+            <thead>
+            <tr>
+                <th>Plan</th>
+                <th>Nombre del Alumno</th>
+                <th>Boleta</th>
+                <th>Estado del Proceso</th>
+            </tr>
+            </thead>
+            <tbody id="studentTableBody">
+            <!-- Se llena vía API -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Paginación -->
+    <div class="pagination-container">
+        <div class="pagination-legend" id="paginationLegend">
+            Mostrando 0 a 0 de 0 alumnos
+        </div>
+        <div class="pagination-controls">
+            <button id="btnPrev" onclick="changePage(-1)" disabled>
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button id="btnNext" onclick="changePage(1)" disabled>
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+
+</div>
+
+<footer></footer> <script src="../Templates/TemplateJS/Footer.js"></script>
+
+
+<script src="../Operative/js/home.js"></script>
+<script src="../Templates/TemplateJS/AlertModal.js"></script>
+<script src="../Templates/TemplateJS/DarkMode.js"></script>
+</body>
+</html>

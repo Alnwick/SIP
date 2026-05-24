@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prácticas Profesionales - Registro Cartas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../master.css">
+    <link rel="stylesheet" href="../Operative/css/operadorCartas.css">
+
+
+
+</head>
+<body>
+<header></header> <script src="../Templates/TemplateJS/Header.js"></script>
+
+<nav class="nav-bar" id="volver-atras"><script src="../Templates/TemplateJS/VolverAtras.js"></script></nav>
+
+<div class="revision-nav-container">
+    <div class="breadcrumb-steps">
+        <button id="nav-DOC_INICIAL" class="nav-btn">
+            <small>Paso 1</small>
+            <span>Documentación Inicial</span>
+        </button>
+        <button id="nav-CARTAS" class="nav-btn">
+            <small>Paso 2</small>
+            <span>Cartas Aceptación/Presentación</span>
+        </button>
+        <button id="nav-DOC_FINAL" class="nav-btn">
+            <small>Paso 3</small>
+            <span>Documentos de Término</span>
+        </button>
+        <button id="nav-LIBERACION" class="nav-btn">
+            <small>Paso 4</small>
+            <span>Liberación de Servicio</span>
+        </button>
+    </div>
+</div><script src="../Templates/TemplateJS/irA.js"></script>
+
+  
+<div class="container">
+
+    <div class="review-panel">
+       <div id="info-estudiante-container"></div><script src="../Templates/TemplateJS/InfoEstudiante.js"></script>
+
+        <div id="docs-container"> <script src="/Templates/TemplateJS/Tarjeta.js"></script>
+        <!-- Generación dinámica de tarjetas -->
+        </div>
+        <div id="docs-list" style="display: flex; flex-direction: column; gap: 1.2rem;"><script src="../Templates/TemplateJS/TarjetaOperador.js"></script>
+            <!-- Renderizado Dinámico -->
+        </div>
+        
+
+        <div class="bottom-actions">
+            <!--<button class="btn-footer btn-blue" id="btn-approve-acta">Aprobar Acta</button>-->
+            <button class="btn-footer btn-green" id="btn-finalize-review">Finalizar Revisión General</button>
+        </div>
+
+        
+    </div>
+    <!-- Lado derecho -->
+    <aside class="preview-side">
+        <div class="viewer-header">
+            <span id="pdf-title">Vista Previa</span>
+        </div>
+        <div class="pdf-content" id="pdfContainer">
+            <div style="text-align:center; color:var(--text-muted)">
+                <p>Selecciona un archivo para visualizarlo aquí.</p>
+            </div>
+        </div>
+    </aside>
+
+</div>
+
+<footer></footer> <script src="../Templates/TemplateJS/Footer.js"></script>
+<script src="/Templates/TemplateJS/AlertModal.js"></script>
+<script src="../Templates/TemplateJS/GestionSeccionSip.js"></script>
+<script src="../Operative/js/operadorCartas.js"></script>
+<script src="../Templates/TemplateJS/DarkMode.js"></script>

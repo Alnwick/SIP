@@ -4,277 +4,54 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Prácticas Profesionales - Panel</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-        }
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../master.css">
+    <link rel="stylesheet" href="css/home.css">
 
-        header {
-            background: linear-gradient(135deg, #1A8C14 0%, #136b10 100%);
-            padding: 15px 30px;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            position: fixed; /* Añadido */
-            top: 0; /* Añadido */
-            left: 0; /* Añadido */
-            right: 0; /* Añadido */
-            z-index: 1000; /* Añadido */
-        }
-
-        .logo {
-            height: 50px;
-            filter: brightness(0) invert(1);
-        }
-
-        .title {
-            font-size: 22px;
-            font-weight: bold;
-        }
-
-        .top-icons {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-            padding: 10px 20px;
-            background-color: #f8f8f8;
-            border-bottom: 1px solid #ddd;
-            flex-shrink: 0;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            position: fixed; /* Añadido */
-            top: 80px; /* Añadido: ajusta según la altura de tu header */
-            left: 0; /* Añadido */
-            right: 0; /* Añadido */
-            z-index: 999; /* Añadido */
-        }
-
-        .icon {
-            width: 24px;
-            height: 24px;
-            cursor: pointer;
-        }
-
-        .icon:hover {
-            transform: scale(1.1);
-        }
-
-        .search-container {
-            margin: 70px;
-            display: flex;
-            justify-content: center;
-        }
-
-        .search-input {
-            width: 80%;
-            padding: 12px;
-            font-size: 16px;
-            border: none;
-            border-radius: 25px;
-            background-color: #e8e8e8;
-        }
-
-        h2 {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .card-container {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 20px;
-            padding: 20px;
-            margin-top: 0px; /* Añadido: header (80px) + top-icons (50px) + espacio extra */
-        }
-
-        .card {
-            width: 150px;
-            background-color: #d7e1d9;
-            border-radius: 15px;
-            padding: 15px;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .card img {
-            width: 80px;
-            height: 80px;
-        }
-
-        .card p {
-            font-size: 14px;
-            margin-top: 10px;
-        }
-
-        footer {
-            background-color: #1A8C14;
-            height: 30px; /* Aumenta la altura */
-            width: 100%; /* Asegura que ocupe todo el ancho */
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 20px;
-            margin-top: 30px;
-            color: #ffffff;
-            font-size: 14px;
-            border-top: 1px solid #eaeaea;
-        }
-
-        html, body {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-
-        body {
-            flex: 1;
-        }
-
-        footer {
-            margin-top: auto;
-        }
-
-        .card {
-            text-decoration: none; /* Quita el subrayado */
-            color: inherit; /* Mantiene el color del texto */
-            display: block;
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            /* Tus estilos normales de card aquí */
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            text-decoration: none; /* Asegura que no aparezca subrayado al hover */
-            color: inherit; /* Mantiene el color al hover */
-        }
-
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: white;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
-            right: 0;
-            border-radius: 5px;
-        }
-
-        .dropdown-content a {
-            color: #333;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-        }
-
-        .dropdown-content a:hover {
-            background-color: #f1f1f1;
-            border-radius: 5px;
-        }
-
-        .show {
-            display: block;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            header {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-
-            .top-icons {
-                top: 120px; /* Añadido: ajuste para móviles donde el header es más alto */
-                padding: 8px 15px; /* Añadido: ajuste para móviles */
-            }
-
-            .card-container {
-                margin-top: 160px; /* Añadido: ajuste para móviles */
-            }
-
-        }
-    </style>
 </head>
 <body>
-<header>
-    <img src="../Recursos/ipn.png" alt="IPN Logo" class="logo">
-    <div class="title">Sistema de Prácticas Profesionales</div>
-    <img src="../Recursos/logo blanco.png" alt="UPIICSA Logo" class="logo">
-</header>
 
-<div class="top-icons" style="padding: 10px 20px;">
-    <img src="../Recursos/icono_mensaje.png" alt="Mensaje" class="icon">
-    <img src="../Recursos/icono_notificacion.png" alt="Notificaciones" class="icon">
-    <div class="dropdown" style="margin-left: auto;">
-        <span>Administrador</span>
-        <img src="../Recursos/icono_usuario.png" alt="Usuario" class="icon" onclick="toggleDropdown()">
-        <div id="userDropdown" class="dropdown-content">
-            <a href="../index.html">Cerrar sesión</a>
+<header></header> <script src="../Templates/TemplateJS/Header.js"></script>
+
+
+<div class="container">
+
+    <!-- 1. Menu -->
+    <div class="section-group">
+        <div class="section-header">
+            <h2>Menu</h2>
+            <div class="line"></div>
+        </div>
+        <div class="card-flex">
+            <a href="registerOperator.html" class="rect-link">
+                <div class="icon-box"><img src="../Imagenes/home_registrar.png" alt=""></div>
+                <span>Registrar Operador</span>
+            </a>
+            <a href="home2.html" class="rect-link" id="card-cartas">
+                <div class="icon-box"><img src="../Imagenes/home_seguimiento.png" alt=""></div>
+                <span>Panel Principal</span>
+                <!--<div class="lock-tag" id="lock-tag2">BLOQUEADO</div>-->
+            </a>
+            <a href="registroseguimiento.html" class="rect-link" id="card-seguimiento">
+                <div class="icon-box"><img src="../Imagenes/home_seguimiento.png" alt=""></div>
+                <span>Ver Reportes</span>
+                <!--<div class="lock-tag" id="lock-tag">BLOQUEADO</div>-->
+            </a>
+
         </div>
     </div>
+
+
 </div>
 
-<div class="search-container">
-    <input type="text" class="search-input" placeholder="Buscar">
-</div>
+<script src="../Templates/TemplateJS/DarkMode.js"></script>
 
-<h2>Menú</h2>
+<footer></footer> <script src="../Templates/TemplateJS/Footer.js"></script>
 
-<div class="card-container">
-    <a href="registrar_usu.html" class="card">
-        <div class="card-content" href="registrar_usu.html">
-            <img src="../Recursos/registrar_usu.png" alt="Registro">
-            <p>Registrar Usuario</p>
-        </div>
-    </a>
+<script src="js/home.js"></script>
+<script src="../Templates/TemplateJS/AlertModal.js"></script>
 
-    <a href="reportes.html" class="card">
-        <div class="card-content">
-            <img src="../Recursos/home_registrar.png" alt="Reportes">
-            <p>Generar reportes</p>
-        </div>
-    </a>
 
-    <div class="card">
-        <img src="../Recursos/home_indicacion.png" alt="Actividad">
-        <p>Ver actividad de mis operativos</p>
-    </div>
-</div>
 
-<footer>
-    <p>Instituto Politécnico Nacional - UPIICSA © 2025 | Sistema de Prácticas Profesionales</p>
-</footer>
-<script>
-    function toggleDropdown() {
-        document.getElementById("userDropdown").classList.toggle("show");
-    }
-
-    // Cerrar el menú desplegable si se hace clic fuera de él
-    window.onclick = function(event) {
-        if (!event.target.matches('.icon')) {
-            var dropdowns = document.getElementsByClassName("dropdown-content");
-            for (var i = 0; i < dropdowns.length; i++) {
-                var openDropdown = dropdowns[i];
-                if (openDropdown.classList.contains('show')) {
-                    openDropdown.classList.remove('show');
-                }
-            }
-        }
-    }
-</script>
 </body>
 </html>

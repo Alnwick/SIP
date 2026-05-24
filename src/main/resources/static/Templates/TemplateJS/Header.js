@@ -1,5 +1,5 @@
 async function renderUniversalHeader(tipoUsuario = 'students') {
-    
+
     let favicon = document.querySelector("link[rel~='icon']");
     if (!favicon) {
         favicon = document.createElement('link');
@@ -11,56 +11,63 @@ async function renderUniversalHeader(tipoUsuario = 'students') {
     const headerElement = document.querySelector('header');
     if (!headerElement) return;
 
+    // 🌟 Mapeo de títulos según el tipo de usuario
+    const titulosSubbarra = {
+        'students': 'Portal Estudiantil',
+        'operative': 'Panel de Control Operativo',
+        'administrador': 'Panel de Control Administrativo'
+    };
+
+    // Obtenemos el texto correspondiente, o un valor por defecto si llega un rol desconocido
+    const textoSubtitulo = titulosSubbarra[tipoUsuario] || 'Panel de Control';
+
     headerElement.innerHTML = `
-    <div class="logo-group">
-        <a href="home.html">
-            <div class="school-logo">
-                        <img src="../Imagenes/Logo/svg/SIP_alpha.svg" alt="Logo Escuela" class="school-logo-img">
-            </div>
-        </a>
-
-        <div class="header-brand">
-            <div class="title-box">
-                <h1>SISTEMA INSTITUCIONAL DE PRÁCTICAS PROFESIONALES</h1>
-                <p>${tipoUsuario === 'students' ? 'Portal Estudiantil' : 'Panel de Control Administrativo'}</p>
-            </div>
-        </div>
-    </div>
+        <div class="logo-group">
+            <a href="home.html">
+                <div class="school-logo">
+                    <img src="../Imagenes/Logo/svg/SIP_alpha.svg" alt="Logo Escuela" class="school-logo-img">
+                </div>
+            </a>
     
-    <div class="user-actions">
-        <div class="user-pill" id="userPill" title="Ver Perfil">
-            <span id="user-pill-name">Cargando...</span>
-            <div class="user-avatar" id="user-pill-initial">?</div>
+            <div class="header-brand">
+                <div class="title-box">
+                    <h1>SISTEMA INSTITUCIONAL DE PRÁCTICAS PROFESIONALES</h1>
+                    <p>${textoSubtitulo}</p>
+                </div>
+            </div>
         </div>
-
-        <div class="action-group">
-            <button class="btn-logout" id="logoutBtn" title="Cerrar Sesión">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                    <polyline points="16 17 21 12 16 7"></polyline>
-                    <line x1="21" y1="12" x2="9" y2="12"></line>
-                </svg>
-            </button>
-        </div>
-    </div>
-
+        
+        <div class="user-actions">
+            <div class="user-pill" id="userPill" title="Ver Perfil">
+                <span id="user-pill-name">Cargando...</span>
+                <div class="user-avatar" id="user-pill-initial">?</div>
+            </div>
     
-`;
+            <div class="action-group">
+                <button class="btn-logout" id="logoutBtn" title="Cerrar Sesión">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    `;
     setupHeaderEvents(tipoUsuario);
     loadHeaderProfile(tipoUsuario);
 }
 
 function setupHeaderEvents(tipoUsuario) {
-    
     const pill = document.getElementById('userPill');
     if (pill) {
         pill.onclick = () => {
+            // 🌟 Por si en el futuro necesitas redirigir a un perfil administrativo diferente
             const path = tipoUsuario === 'students' ? 'perfil.html' : 'perfil.html';
             window.location.href = path;
         };
     }
 
-    
     const logoutBtn = document.getElementById('logoutBtn');
     if (logoutBtn) {
         logoutBtn.onclick = async () => {
@@ -74,7 +81,7 @@ function setupHeaderEvents(tipoUsuario) {
     }
 }
 
-async function  loadHeaderProfile(tipoUsuario) {
+async function loadHeaderProfile(tipoUsuario) {
     try {
         const endpoint = `/${tipoUsuario}/data`;
         const resp = await fetch(endpoint);
@@ -89,7 +96,8 @@ async function  loadHeaderProfile(tipoUsuario) {
             if (nameEl) nameEl.textContent = `${firstName} ${lastName}`;
             if (initialEl) initialEl.textContent = firstName.charAt(0).toUpperCase();
 
-            console.log("Status en Header:", statusParaMostrar);
+            // 🌟 Nota: Si 'statusParaMostrar' te da error en la consola, recuerda definirlo o quitar esta línea
+            // console.log("Status en Header:", statusParaMostrar);
         }
     } catch (error) {
         console.error("Error al cargar perfil en el header:", error);

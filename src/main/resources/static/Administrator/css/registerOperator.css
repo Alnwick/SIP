@@ -1,0 +1,182 @@
+@import url('../../global.css');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg);
+    color: var(--text-main);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+/* --- CONTENIDO --- */
+.container {
+    margin: 2.5rem auto;
+    flex: 1;
+}
+
+/* Contenedor principal del Formulario */
+.form-container {
+    background: var(--white);
+    max-width: 650px;
+    width: 100%;
+    padding: 2.5rem;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px var(--shadow-brand-overlay);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+}
+
+/* Encabezados y Textos descriptivos */
+.form-container h2 {
+    color: var(--primary-dark);
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+/* Línea sutil decorativa bajo el título con la identidad de la app */
+.form-container h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 4px;
+    background: var(--primary);
+    border-radius: 2px;
+}
+
+.form-container p {
+    color: #7f8c8d;
+    font-size: 0.95rem;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+}
+
+/* Grid layout inteligente para los campos */
+#form-register-operator {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem 1.5rem;
+}
+
+/* Manejo de grupos de inputs */
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Hacemos que el email y las alertas tomen el ancho completo si es necesario */
+.form-group:nth-child(4) {
+    grid-column: span 2;
+}
+
+/* Etiquetas (Labels) estéticas */
+.form-group label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-main);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Inputs con diseño moderno */
+.form-group input {
+    font-family: 'Poppins', sans-serif;
+    padding: 0.8rem 1rem;
+    font-size: 0.95rem;
+    border: 1.5px solid var(--border-color);
+    border-radius: 8px;
+    background-color: var(--bg-alternative);
+    color: var(--text-main);
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* Efecto Hover e Focus de nivel Experto (Glow sutil) */
+.form-group input:hover {
+    border-color: #b2bec3;
+}
+
+.form-group input:focus {
+    border-color: var(--primary);
+    background-color: var(--white);
+    box-shadow: 0 0 0 4px rgba(128, 0, 32, 0.1);
+}
+
+/* Estilo para los Placeholders */
+.form-group input::placeholder {
+    color: #b2bec3;
+    font-size: 0.88rem;
+}
+
+/* Contenedor del botón de acción (Toma todo el ancho inferior) */
+.form-actions {
+    grid-column: span 2;
+    margin-top: 1rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Botón de envío con micro-interacciones */
+#btn-submit-operator {
+    font-family: 'Poppins', sans-serif;
+    background: var(--primary, #800020);
+    color: var(--white, #ffffff);
+    border: none;
+    padding: 0.9rem 2.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: auto;
+}
+
+/* Micro-interacciones del botón */
+#btn-submit-operator:hover:not(:disabled) {
+    transform: translateY(-2px);
+}
+
+#btn-submit-operator:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+/* Estado Deshabilitado (Cuando se está procesando la petición fetch) */
+#btn-submit-operator:disabled {
+    background-color: #cbd5e1;
+    color: #94a3b8;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+@media (max-width: 680px) {
+    .form-container {
+        padding: 1.75rem;
+        border-radius: 12px;
+    }
+
+    #form-register-operator {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .form-group,
+    .form-group:nth-child(4),
+    .form-actions {
+        grid-column: span 1;
+    }
+
+    #btn-submit-operator {
+        width: 100%; /* El botón se vuelve gigante y fácil de presionar en móviles */
+        padding: 1rem;
+    }
+}
