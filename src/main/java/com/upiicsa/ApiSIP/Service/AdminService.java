@@ -59,6 +59,13 @@ public class AdminService {
         long activeCount;
         long finishCount;
 
+        if(careersInclude.isEmpty()) {
+            careersInclude = catalogsService.getCareers("UPIICSA")
+                    .stream()
+                    .map(c -> c.acronym())
+                    .collect(Collectors.toList());
+        }
+
         List<ExcelTableStudentsDto> tableStudents = processService.getStudentReport(start, end, careersInclude);
         List<ExcelTableCareerDto> tableCareers;
 
