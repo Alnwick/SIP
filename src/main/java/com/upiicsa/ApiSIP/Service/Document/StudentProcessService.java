@@ -1,6 +1,7 @@
 package com.upiicsa.ApiSIP.Service.Document;
 
 import com.upiicsa.ApiSIP.Dto.Data.DashboardStatsDto;
+import com.upiicsa.ApiSIP.Dto.Data.ExcelTableStudentsDto;
 import com.upiicsa.ApiSIP.Dto.Data.ProcessProgressDto;
 import com.upiicsa.ApiSIP.Exception.BusinessException;
 import com.upiicsa.ApiSIP.Model.Catalogs.ProcessStatus;
@@ -21,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -167,5 +169,10 @@ public class StudentProcessService {
                 counts.getOrDefault("CARTAS", 0L).intValue(),
                 counts.getOrDefault("DOC_FINAL", 0L).intValue()
         );
+    }
+
+    public List<ExcelTableStudentsDto> getStudentReport(LocalDateTime start, LocalDateTime end, List<String> careers) {
+
+        return processRepository.getStudentsReport(start, end, careers);
     }
 }
