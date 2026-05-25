@@ -14,14 +14,19 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+
+import static com.upiicsa.ApiSIP.Security.Config.SecurityConfig.PUBLIC_PATHS;
 
 public class JwtTokenValidator extends OncePerRequestFilter {
 
     private UserRepository userRepository;
     private JwtUtils jwtUtils;
+
+    private final AntPathMatcher pathMatcher = new AntPathMatcher();
 
     public JwtTokenValidator(JwtUtils jwtUtils, UserRepository userRepository) {
         this.jwtUtils = jwtUtils;
@@ -70,15 +75,13 @@ public class JwtTokenValidator extends OncePerRequestFilter {
     }
 
     @Override
-    protected boolean shouldNotFilter(@NonNull HttpServletRequest request) throws ServletException {
+    protected boolean shouldNotFilter(@NonNull HttpServletRequest request) {
         String path = request.getServletPath();
-        return path.startsWith("/styles.css") ||
-                path.startsWith("/script.js") ||
-                path.startsWith("/index.html") ||
-                path.startsWith("/favicon.ico") ||
-                path.startsWith("/.well-known/") ||
-                path.endsWith(".png") ||
-                path.endsWith(".jpg") ||
-                path.startsWith("/public/");
+        for (String publicPath : PUBLIC_PATHS) {
+            if (pathMatcher.match(publicPath, path)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

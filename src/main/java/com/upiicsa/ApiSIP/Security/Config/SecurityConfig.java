@@ -3,6 +3,7 @@ package com.upiicsa.ApiSIP.Security.Config;
 import com.upiicsa.ApiSIP.Repository.UserRepository;
 import com.upiicsa.ApiSIP.Security.Filter.JwtTokenValidator;
 import com.upiicsa.ApiSIP.Utils.JwtUtils;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -27,7 +28,13 @@ public class SecurityConfig {
     private final JwtUtils jwtUtils;
     private final UserRepository userRepository;
 
-    public  SecurityConfig(JwtUtils jwtUtils, UserRepository userRepository) {
+    public static final String[] PUBLIC_PATHS = {
+            "/Imagenes/**", "/Templates/**", "/*.css", "/*.js", "/index.html", "/reset-password.html",
+            "/auth/**", "/api/forgot-password", "/api/reset-password/**", "/catalogs/**", "/students/register",
+            "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html"
+    };
+
+    public SecurityConfig(JwtUtils jwtUtils, UserRepository userRepository) {
         this.jwtUtils = jwtUtils;
         this.userRepository = userRepository;
     }
@@ -42,21 +49,19 @@ public class SecurityConfig {
                         sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(new JwtTokenValidator(jwtUtils, userRepository), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/Administrator/**", "/Imagenes/**", "/Operative/**", "/Student/**",
-                                "Templates/**", "index.html", "master.css", "script.js", "styles.css",
-                                "reset-password.html")
-                        .permitAll()
-                        .requestMatchers("/auth/login", "/api/forgot-password", "/api/reset-password/**",
-                                "/auth/confirm-email", "auth/resend-code", "/students/register", "/reset-password.html",
-                                "/catalogs/**")
-                        .permitAll()
-                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html")
-                        .permitAll()
+                        .requestMatchers(PUBLIC_PATHS).permitAll()
+                        .requestMatchers("/Administrator/**").hasRole("ADMINISTRADOR")
+                        .requestMatchers("/Operative/**").hasAnyRole("ADMINISTRADOR", "OPERADOR")
+                        .requestMatchers("/Student/**").hasRole("ALUMNO")
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(exception -> exception
-                        .authenticationEntryPoint((request, response, authException)
-                                -> response.sendRedirect("/index.html")))
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.setContentType("application/json;charset=UTF-8");
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            response.getWriter().write("{\"error\": \"Unauthorized\", \"message\": \"Session no active. Re-login.\"}");
+                        })
+                )
                 .build();
     }
     @Bean
