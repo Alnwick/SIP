@@ -1,5 +1,6 @@
 package com.upiicsa.ApiSIP.Controller;
 
+import com.upiicsa.ApiSIP.Dto.Email.ChangePasswordDto;
 import com.upiicsa.ApiSIP.Dto.Email.ForgotPasswordDto;
 import com.upiicsa.ApiSIP.Dto.Email.ResetPasswordDto;
 import com.upiicsa.ApiSIP.Service.Auth.PasswordResetService;
@@ -48,10 +49,10 @@ public class PasswordResetController {
     }
 
     @PostMapping("/change-password")
-    public ResponseEntity<Void> changePassword(@RequestBody String newPassword) {
+    public ResponseEntity<Void> changePassword(@RequestBody ChangePasswordDto dto) {
         Integer userId  = AuthHelper.getAuthenticatedUserId();
         try {
-            resetService.changePassword(userId, newPassword);
+            resetService.changePassword(userId, dto.newPassword());
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();

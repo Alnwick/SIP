@@ -49,6 +49,10 @@ public class UserService {
 
     @Transactional
     public void updatePassword(UserSIP user, String password) {
+
+        if(passwordEncoder.matches(password, user.getPassword())){
+            throw new BusinessException(ErrorCode.PASSWORD_MISMATCH);
+        }
         user.setPassword(passwordEncoder.encode(password));
         userRepository.save(user);
     }
