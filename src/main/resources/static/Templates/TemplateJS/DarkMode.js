@@ -1,4 +1,4 @@
-const themeToggleContainer = document.createElement('div');
+/*const themeToggleContainer = document.createElement('div');
 themeToggleContainer.id = 'theme-toggle-container';
 
 
@@ -27,13 +27,11 @@ function setTheme(isDark) {
     }
 }
 
-// Detección inicial: Sistema Operativo vs LocalStorage
 if (currentTheme === 'dark' || (!currentTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
     setTheme(true);
 }
 
-// Evento de click para cambiar manualmente
 btnDark.addEventListener('click', () => {
     const isDark = document.body.classList.contains('dark-mode');
     setTheme(!isDark);
-});
+});*/

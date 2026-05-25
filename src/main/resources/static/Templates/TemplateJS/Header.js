@@ -11,14 +11,12 @@ async function renderUniversalHeader(tipoUsuario = 'students') {
     const headerElement = document.querySelector('header');
     if (!headerElement) return;
 
-    // 🌟 Mapeo de títulos según el tipo de usuario
     const titulosSubbarra = {
         'students': 'Portal Estudiantil',
         'operative': 'Panel de Control Operativo',
         'administrador': 'Panel de Control Administrativo'
     };
 
-    // Obtenemos el texto correspondiente, o un valor por defecto si llega un rol desconocido
     const textoSubtitulo = titulosSubbarra[tipoUsuario] || 'Panel de Control';
 
     headerElement.innerHTML = `
@@ -62,7 +60,6 @@ function setupHeaderEvents(tipoUsuario) {
     const pill = document.getElementById('userPill');
     if (pill) {
         pill.onclick = () => {
-            // 🌟 Por si en el futuro necesitas redirigir a un perfil administrativo diferente
             const path = tipoUsuario === 'students' ? 'perfil.html' : 'perfil.html';
             window.location.href = path;
         };
@@ -96,8 +93,6 @@ async function loadHeaderProfile(tipoUsuario) {
             if (nameEl) nameEl.textContent = `${firstName} ${lastName}`;
             if (initialEl) initialEl.textContent = firstName.charAt(0).toUpperCase();
 
-            // 🌟 Nota: Si 'statusParaMostrar' te da error en la consola, recuerda definirlo o quitar esta línea
-            // console.log("Status en Header:", statusParaMostrar);
         }
     } catch (error) {
         console.error("Error al cargar perfil en el header:", error);

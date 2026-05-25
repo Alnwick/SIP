@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prácticas Profesionales - Panel de Reportes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../master.css">
+    <link rel="stylesheet" href="css/reports.css">
+</head>
+<body>
+
+<header></header>
+<script src="../Templates/TemplateJS/Header.js"></script>
+
+<div class="container">
+
+    <div class="nav-section">
+
+        <div class="left-side">
+            <div class="nav-header-container">
+                <i class="fas fa-sliders-h"></i>
+                <h3 class="nav-title">Filtros Dinámicos del Reporte</h3>
+            </div>
+            <div class="filter-actions">
+                <button id="btnApplyFilters" class="btn btn-primary"><i class="fas fa-filter"></i> Aplicar</button>
+                <button id="btnDescargarReporte" class="btn btn-success"><i class="fas fa-file-excel"></i> Descargar</button>
+            </div>
+
+        </div>
+
+        <div class="filter-card">
+            <div class="filters-container-row">
+
+                <div class="filter-group dates-group">
+                    <div class="input-field">
+                        <label><i class="fas fa-calendar-alt"></i> FECHA DE INICIO</label>
+                        <input type="date" id="startDateInput" value="2026-01-01">
+                    </div>
+                    <div class="input-field">
+                        <label><i class="fas fa-calendar-alt"></i> FECHA DE FIN</label>
+                        <input type="date" id="endDateInput" value="2026-05-31">
+                    </div>
+                </div>
+
+                <div class="filter-group careers-group">
+                    <label><i class="fas fa-graduation-cap"></i> CARRERAS A INCLUIR</label>
+                    <div class="checkbox-careers-container" id="careerContainer">
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="info-header">
+        <div class="info-header-title-block">
+            <h2 id="currentTitle"><i class="fas fa-table"></i> Listado de Alumnos</h2>
+            <span class="info-header-subtitle">Registros listos para revisión y exportación a Excel</span>
+        </div>
+
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Buscar por nombre o boleta...">
+        </div>
+    </div>
+
+    <div class="stats-grid" id="statsGrid" style="display: none;"></div>
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+            <tr>
+                <th>Plan</th>
+                <th>Nombre del Alumno</th>
+                <th>Boleta</th>
+                <th>Estado del Proceso</th>
+            </tr>
+            </thead>
+            <tbody id="studentTableBody">
+            </tbody>
+        </table>
+    </div>
+
+    <div class="pagination-container">
+        <div class="pagination-legend" id="paginationLegend">
+            Mostrando 0 a 0 de 0 alumnos
+        </div>
+        <div class="pagination-controls">
+            <button id="btnPrev" onclick="changePage(-1)" disabled>
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button id="btnNext" onclick="changePage(1)" disabled>
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+
+</div>
+
+<script src="../Templates/TemplateJS/DarkMode.js"></script>
+
+<footer></footer>
+<script src="../Templates/TemplateJS/Footer.js"></script>
+
+<script src="js/reports.js"></script>
+<script src="../Templates/TemplateJS/AlertModal.js"></script>
+
+</body>
+</html>

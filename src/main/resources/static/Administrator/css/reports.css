@@ -1,0 +1,436 @@
+@import url('../../global.css');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg);
+    color: var(--text-main);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* --- CONTENEDOR PRINCIPAL --- */
+.container {
+    max-width: 1400px; /* Un poco más amplio para albergar la barra unificada */
+    width: 95%;
+    margin: 2rem auto;
+    flex: 1;
+}
+
+/* ==========================================================================
+   PANEL DE FILTROS DINÁMICOS
+   ========================================================================== */
+.nav-section {
+    background: var(--white);
+    border-radius: 1.25rem;
+    padding: 1.25rem 1.75rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 25px var(--shadow-brand-overlay);
+    border: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.left-side{
+    display: flex;
+    flex-direction: row;
+}
+
+/* Encabezado del Panel de Filtros */
+.nav-header-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+
+
+.nav-header-container i {
+    color: var(--primary);
+    font-size: 1.1rem;
+    background: rgba(128, 0, 32, 0.04);
+    padding: 6px;
+    border-radius: 8px;
+}
+
+.nav-title {
+    font-size: 1.05rem;
+    color: var(--text-main);
+    font-weight: 700;
+    margin-bottom: 0;
+}
+
+
+
+/* Quitamos márgenes o fondos extra que pudiera heredar de diseños viejos */
+.filter-card {
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+    border: none;
+}
+
+/* Barra unificada de filtros usando Flexbox */
+.filters-container-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 1.25rem;
+    width: 100%;
+}
+
+/* Bloque de Fechas alineadas una al lado de la otra */
+.dates-group {
+    display: flex;
+    gap: 0.75rem;
+    flex: 0 0 auto;
+}
+
+/* Campos de entrada individuales (Labels + Inputs de tu HTML) */
+.input-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.input-field label,
+.careers-group label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+/* Inputs de Fecha Estilizados vinculados directamente a tu HTML */
+.input-field input[type="date"] {
+    padding: 0.55rem 0.75rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--border-color, #cbd5e1);
+    background-color: #f8fafc;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #334155;
+    outline: none;
+    min-width: 150px;
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+.input-field input[type="date"]:focus {
+    border-color: var(--primary, #800020);
+    background-color: var(--white, #ffffff);
+    box-shadow: 0 0 0 3px rgba(128, 0, 32, 0.08);
+}
+
+/* El contenedor de las carreras toma el espacio central disponible */
+.careers-group {
+    flex: 1 1 0%;
+    min-width: 280px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+/* Contenedor de las burbujas/checkboxes */
+.checkbox-careers-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--white);
+    padding: 0.35rem 0.65rem;
+    border-radius: 0.85rem;
+    border: 1px solid var(--border-color);
+    min-height: 40px;
+}
+
+/* Estilo de cada burbuja individual con su Checkbox */
+.career-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.85rem;
+    background-color: var(--white, #ffffff);
+    border-radius: 2rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 600;
+    font-size: 0.8rem;
+    border: 1px solid var(--border-color, #cbd5e1);
+    color: #475569;
+    user-select: none;
+}
+
+.career-checkbox-label input[type="checkbox"] {
+    accent-color: var(--primary, #800020);
+    cursor: pointer;
+    width: 14px;
+    height: 14px;
+}
+
+.career-checkbox-label:hover {
+    border-color: var(--primary, #800020);
+    color: var(--primary, #800020);
+    background-color: #fffafb;
+}
+
+/* Estado visual cuando la cajita/checkbox está activa */
+.career-checkbox-label:has(input:checked) {
+    background-color: #eff6ff;
+    color: #1d4ed8;
+    border-color: #bfdbfe;
+}
+
+/* --- BOTONES DE ACCIÓN (VINCULADOS A TUS CLASES HTML) --- */
+.filter-actions {
+    display: flex;
+    gap: 0.6rem;
+    flex: 0 0 auto;
+    margin-left: auto; /* Empuja los botones hacia la derecha de la fila */
+}
+
+/* Botón Aplicar (Originalmente .btn-primary) */
+.filter-actions .btn.btn-primary {
+    background-color: var(--primary-dark, #600018); /* Color guinda UPIICSA */
+    color: white;
+    border: none;
+    padding: 0.6rem 1.35rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    font-size: 0.88rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.2s ease;
+}
+
+.filter-actions .btn.btn-primary:hover {
+    background-color: #400010;
+    transform: translateY(-1px);
+}
+
+/* Botón Descargar (Originalmente .btn-success) */
+.filter-actions .btn.btn-success {
+    background-color: #00a86b; /* Verde de descarga Excel */
+    color: white;
+    border: none;
+    padding: 0.6rem 1.35rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    font-size: 0.88rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.2s ease;
+}
+
+.filter-actions .btn.btn-success:hover {
+    background-color: #008f5d;
+    transform: translateY(-1px);
+}
+
+/* Ajustes Responsive */
+@media (max-width: 992px) {
+    .filter-actions {
+        margin-left: 0;
+        width: 100%;
+    }
+    .filter-actions .btn {
+        flex: 1;
+        justify-content: center;
+    }
+}
+
+/* ==========================================================================
+   SECCIÓN DE TABLA Y CONTENIDO GENERAL
+   ========================================================================== */
+
+.info-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 2.5rem 0 1rem;
+}
+
+.info-header-title-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.info-header h2 {
+    color: #1e293b;
+    font-size: 1.3rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.info-header h2 i {
+    color: #00a86b;
+}
+
+.info-header-subtitle {
+    font-size: 0.85rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+/* Contador de filas en la esquina superior derecha */
+.rows-counter-tag {
+    background-color: #e2f8f0;
+    color: #00a86b;
+    font-weight: 700;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+}
+
+/* --- TABLA DE ALUMNOS ESTILIZADA --- */
+.table-wrapper {
+    background: var(--white, #ffffff);
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+    border: 1px solid var(--border-color, #e2e8f0);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background-color: #f8fafc;
+    color: #64748b;
+    text-align: left;
+    padding: 1rem 1.5rem;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--border-color, #e2e8f0);
+    font-weight: 700;
+}
+
+td {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-color, #f1f5f9);
+    font-size: 0.9rem;
+    color: #334155;
+    background: var(--white, #ffffff);
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+tr:hover td {
+    background-color: #f8fafc;
+}
+
+/* --- RE-DISEÑO DE ETIQUETAS DE ESTADO MULTICOLOR --- */
+.visual-status {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-align: center;
+    min-width: 100px;
+}
+
+/* Clases de estados según la ilustración del listado */
+.visual-status.registrado {
+    background-color: #eff6ff;
+    color: #2563eb;
+}
+
+.visual-status.concluido {
+    background-color: #e2f8f0;
+    color: #00a86b;
+}
+
+.visual-status.activo {
+    background-color: #fffbeb;
+    color: #d97706;
+}
+
+.visual-status.baja {
+    background-color: #fef2f2;
+    color: #dc2626;
+}
+
+/* Ocultar el grid antiguo de estadísticas que ya no se usa en esta pantalla */
+.stats-grid {
+    display: none;
+}
+
+/* --- PAGINACIÓN --- */
+.pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    padding: 0 0.5rem;
+}
+
+.pagination-legend {
+    font-size: 0.85rem;
+    color: #64748b;
+    font-weight: 600;
+}
+
+
+
+
+/* ==========================================================================
+   MEDIA QUERIES - RESPONSIVE (MÓVIL / TABLETA)
+   ========================================================================== */
+@media (max-width: 1100px) {
+    .items-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filter-actions-container {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .btn-filter-apply, .btn-filter-download {
+        flex: 1;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .info-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .carreras-selector-box {
+        flex-wrap: wrap;
+    }
+
+    .left-side{
+        flex-direction: column;
+    }
+}

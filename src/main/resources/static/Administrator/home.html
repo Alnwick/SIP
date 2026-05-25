@@ -7,51 +7,67 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="../master.css">
     <link rel="stylesheet" href="css/home.css">
-
 </head>
 <body>
 
-<header></header> <script src="../Templates/TemplateJS/Header.js"></script>
-
+<header></header>
+<script src="../Templates/TemplateJS/Header.js"></script>
 
 <div class="container">
 
-    <!-- 1. Menu -->
     <div class="section-group">
         <div class="section-header">
             <h2>Menu</h2>
             <div class="line"></div>
         </div>
+
         <div class="card-flex">
+
             <a href="registerOperator.html" class="rect-link">
-                <div class="icon-box"><img src="../Imagenes/home_registrar.png" alt=""></div>
-                <span>Registrar Operador</span>
+                <div class="icon-box">
+                    <img src="../Imagenes/home_registrar.png" alt="Registrar">
+                </div>
+                <div class="card-info">
+                    <span>Registrar Operador</span>
+                    <p>Dar de alta nuevas cuentas de operadores de servicio social en el sistema.</p>
+                </div>
+                <div class="card-action">Acceder <span>&rarr;</span></div>
             </a>
+
             <a href="home2.html" class="rect-link" id="card-cartas">
-                <div class="icon-box"><img src="../Imagenes/home_seguimiento.png" alt=""></div>
-                <span>Panel Principal</span>
-                <!--<div class="lock-tag" id="lock-tag2">BLOQUEADO</div>-->
+                <div class="icon-box">
+                    <img src="../Imagenes/home_seguimiento.png" alt="Panel">
+                </div>
+                <div class="card-info">
+                    <span>Panel Principal</span>
+                    <p>Monitorear y gestionar el estatus global de los alumnos y sus documentos.</p>
+                </div>
+                <div class="card-action">Acceder <span>&rarr;</span></div>
             </a>
-            <a href="registroseguimiento.html" class="rect-link" id="card-seguimiento">
-                <div class="icon-box"><img src="../Imagenes/home_seguimiento.png" alt=""></div>
-                <span>Ver Reportes</span>
-                <!--<div class="lock-tag" id="lock-tag">BLOQUEADO</div>-->
+
+            <a href="reports.html" class="rect-link" id="card-seguimiento">
+                <div class="icon-box">
+                    <img src="../Imagenes/home_seguimiento.png" alt="Reportes">
+                </div>
+                <div class="card-info">
+                    <span>Ver Reportes</span>
+                    <p>Consultar las estadísticas, bitácoras e informes mensuales del periodo.</p>
+                </div>
+                <div class="card-action">Acceder <span>&rarr;</span></div>
             </a>
 
         </div>
     </div>
 
-
 </div>
 
 <script src="../Templates/TemplateJS/DarkMode.js"></script>
 
-<footer></footer> <script src="../Templates/TemplateJS/Footer.js"></script>
+<footer></footer>
+<script src="../Templates/TemplateJS/Footer.js"></script>
 
 <script src="js/home.js"></script>
 <script src="../Templates/TemplateJS/AlertModal.js"></script>
-
-
 
 </body>
 </html>

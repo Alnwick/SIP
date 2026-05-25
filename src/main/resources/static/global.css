@@ -4,7 +4,7 @@
     --primary-dark: #136b10;
     --primary-light: #e8f5e9;
     --accent: #10b981; 
-    --bg: #f4f7f4;
+    --bg: #fcfffc;
     --navActive: #f39c12;
 
     /*header boton salir*/
@@ -13,7 +13,7 @@
 
     /* --- Superficies (Claves para Dark Mode) --- */
     --bg-main: #ffffff;           
-    --bg-alternative: #fff9f9;           
+    --bg-alternative: #f7fbff;
     --bg-panel: #ffffff;         
     --bg-input: #f8fafc;         
     --bg-overlay: #1A8C14;       

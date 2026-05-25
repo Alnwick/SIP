@@ -29,7 +29,7 @@ public class AdminController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("generate-report")
+    @PostMapping("generate-report")
     @PreAuthorize("hasAnyRole('ADMINISTRADOR')")
     public ResponseEntity<byte[]> downloadExcel(@RequestParam String startDate,
                                                 @RequestParam String endDate,
