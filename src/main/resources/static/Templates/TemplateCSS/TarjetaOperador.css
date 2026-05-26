@@ -95,10 +95,11 @@ input[type="radio"] { display: none; }
     gap: 0.5rem;
 }
 
-.btn-select-file {
+.btn-select-file,
+.btn-submit{
     cursor: pointer;
     width: 100%;
-    background-color: var(--primary);
+    background: var(--btn-subir-archivo);
     color: var(--blanco-blanco);
     padding: .6rem;
     border-radius: 1rem;
@@ -106,15 +107,7 @@ input[type="radio"] { display: none; }
     text-align: center;
 }
 
-/*Boton Guardar cambios de la tarjeta carta presentacion*/
-.btn-submit{
-    background-color: var(--primary);
-    padding: .7rem;
-    border-radius: .5rem;
-    color: var(--text-main);
-    margin-left: 27rem;
 
-}
 @media (max-width: 768px) {
     .doc-header{
         align-items: center;

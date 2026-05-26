@@ -56,6 +56,9 @@
     /*---VisualStatus ---*/
     --status-blue: #0369a1;
     --status-green: #0ba928;
+
+    /*----------- Botones ----------*/
+    --btn-subir-archivo: linear-gradient(135deg, var(--primary) 60%, var(--primary-dark) 100%);
 }
 /* Esta clase se activará en el body al presionar el botón */
 body.dark-mode {

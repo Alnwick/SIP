@@ -101,7 +101,7 @@
 
 /*boton buscar archivo*/
  .btn-browse {
-        background: var(--primary);
+        background: var(--btn-subir-archivo);
         color: var(--blanco-blanco);
         padding: 0.7rem 0;
         border-radius: 0.8rem;

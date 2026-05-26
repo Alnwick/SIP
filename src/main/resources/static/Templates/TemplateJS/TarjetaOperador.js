@@ -67,7 +67,7 @@ function TarjetaOperador(doc, options = {}) {
                 </div>
                 <div style="display:flex; gap:0.8rem; align-items:center;">
                     ${isRevisado ? '<span class="locked-badge">Correcto</span>' : ''}
-                    ${isIncorrecto ? '<span class="locked-badge" style="background:var(--error, #dc3545);">Corrección Solicitada</span>' : ''}
+                    ${isIncorrecto ? '<span class="locked-badge" style="background:var(--error);">Corrección Solicitada</span>' : ''}
                     
                     <button class="btn-view" ${!hasFile ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''}>
                         ${hasFile ? 'Ver Archivo' : 'Sin Archivo'}
@@ -76,17 +76,19 @@ function TarjetaOperador(doc, options = {}) {
             </div>
 
             ${isCargado ? `
-                <div class="status-actions">
-                    <label class="action-label opt-ok">
-                        <input type="radio" name="st-${uniqueId}" value="REVISADO_CORRECTO" ${doc.status === 'CORRECTO' ? 'checked' : ''}>
-                        Correcto
-                    </label>
-                    <label class="action-label opt-err">
-                        <input type="radio" name="st-${uniqueId}" value="REVISADO_INCORRECTO" ${doc.status === 'INCORRECTO' ? 'checked' : ''}>
-                        Incorrecto
-                    </label>
-                </div>
-                <textarea class="comment-area" id="comm-${uniqueId}" placeholder="Observaciones de revisión...">${doc.comment || ''}</textarea>
+                ${!isIncorrecto ? `
+                    <div class="status-actions">
+                        <label class="action-label opt-ok">
+                            <input type="radio" name="st-${uniqueId}" value="REVISADO_CORRECTO" ${doc.status === 'CORRECTO' ? 'checked' : ''}>
+                            Correcto
+                        </label>
+                        <label class="action-label opt-err">
+                            <input type="radio" name="st-${uniqueId}" value="REVISADO_INCORRECTO" ${doc.status === 'INCORRECTO' ? 'checked' : ''}>
+                            Incorrecto
+                        </label>
+                    </div>
+                ` : ''}
+                <textarea class="comment-area" id="comm-${uniqueId}" placeholder="Observaciones de revisión..." ${isIncorrecto ? 'disabled style="background-color: #f1f5f9; cursor: not-allowed;"' : ''}>${doc.comment || ''}</textarea>
             ` : ''}
 
             ${isSinDoc ? `<div class="sin-doc-msg">El alumno aún no ha cargado este documento.</div>` : ''}
