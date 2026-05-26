@@ -54,7 +54,7 @@ function TarjetaOperador(doc, options = {}) {
                 <input type="file" id="file-CP" accept="application/pdf" style="display: none;">
                 <p style="font-size: 0.8rem; color: #666; margin-top: 5px; margin-right: auto;">Peso no mayor a 1MB.</p>
                 <div class="sticky-action-bar">
-                    <button class="btn-submit" id="btn-global-save">Guardar Cambios</button>
+                    <button class="btn-submit" id="btn-global-save">Subir Carta</button>
                 </div>
             </div>
         `;

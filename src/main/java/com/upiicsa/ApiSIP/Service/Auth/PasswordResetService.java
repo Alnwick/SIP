@@ -37,7 +37,7 @@ public class PasswordResetService {
             TokenReset tokenReset = new TokenReset(null, token, LocalDateTime.now().plusMinutes(15), null, user);
         tokenResetRepository.save(tokenReset);
 
-        String resetUrl = "http://localhost:8080/reset-password.html?token=" + token;
+        String resetUrl = "https:/sip.upiicsa.ink/reset-password.html?token=" + token;
 
         emailService.sendResetEmail(user.getEmail(), resetUrl);
 
