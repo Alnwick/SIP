@@ -5,6 +5,7 @@ import com.upiicsa.ApiSIP.Dto.Document.ReviewDocumentDto;
 //import com.upiicsa.ApiSIP.Dto.Document.UpdateReviewDto;
 import com.upiicsa.ApiSIP.Service.Document.DocumentService;
 import com.upiicsa.ApiSIP.Service.Document.ReviewDocumentService;
+import com.upiicsa.ApiSIP.Service.Document.ReviewLockService;
 import com.upiicsa.ApiSIP.Utils.AuthHelper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,10 +20,13 @@ public class DocumentController {
 
     private DocumentService documentService;
     private ReviewDocumentService reviewService;
+    private ReviewLockService lockService;
 
-    public DocumentController(DocumentService documentService,  ReviewDocumentService reviewService) {
+    public DocumentController(DocumentService documentService, ReviewDocumentService reviewService,
+                              ReviewLockService lockService) {
         this.documentService = documentService;
         this.reviewService = reviewService;
+        this.lockService = lockService;
     }
 
     @GetMapping("/my-status")
@@ -60,7 +64,10 @@ public class DocumentController {
     @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'OPERADOR')")
     public ResponseEntity<Boolean> reviewedDocument(@RequestParam String enrollment,
                                                     @RequestBody List<ReviewDocumentDto> reviewsDto) {
-        reviewService.performReview(enrollment, reviewsDto, getUserId());
+        Integer operatorId = getUserId();
+
+        reviewService.performReview(enrollment, reviewsDto, operatorId);
+        lockService.releaseLock(enrollment, operatorId);
 
         return ResponseEntity.ok(true);
     }

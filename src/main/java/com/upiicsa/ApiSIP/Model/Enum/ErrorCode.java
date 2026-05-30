@@ -39,7 +39,10 @@ public enum ErrorCode {
     PDF_GENERATION_ERROR("Ocurrió un problema al generar o leer el documento PDF.",
             HttpStatus.INTERNAL_SERVER_ERROR),
     INTERNAL_ERROR("Ocurrió un error inesperado en el servidor.",
-            HttpStatus.INTERNAL_SERVER_ERROR);
+            HttpStatus.INTERNAL_SERVER_ERROR),
+
+    ALREADY_UNDER_REVIEW("EL alumno ya esta siendo revisado por otro operador.",
+            HttpStatus.BAD_REQUEST);
 
     private final String defaultMessage;
     private final HttpStatus httpStatus;

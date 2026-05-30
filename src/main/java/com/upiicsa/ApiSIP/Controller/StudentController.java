@@ -6,7 +6,10 @@ import com.upiicsa.ApiSIP.Dto.Student.ResponseStudentDto;
 import com.upiicsa.ApiSIP.Dto.Student.StudentRegistrationDto;
 import com.upiicsa.ApiSIP.Dto.Student.StudentReviewDto;
 import com.upiicsa.ApiSIP.Dto.User.DataDto;
+import com.upiicsa.ApiSIP.Exception.BusinessException;
+import com.upiicsa.ApiSIP.Model.Enum.ErrorCode;
 import com.upiicsa.ApiSIP.Model.Student;
+import com.upiicsa.ApiSIP.Service.Document.ReviewLockService;
 import com.upiicsa.ApiSIP.Service.Document.StudentProcessService;
 import com.upiicsa.ApiSIP.Service.StudentService;
 import com.upiicsa.ApiSIP.Utils.AuthHelper;
@@ -30,10 +33,13 @@ public class StudentController {
 
     private StudentService studentService;
     private StudentProcessService processService;
+    private ReviewLockService lockService;
 
-    public StudentController(StudentService studentService, StudentProcessService processService) {
+    public StudentController(StudentService studentService, StudentProcessService processService,
+                             ReviewLockService lockService) {
         this.studentService = studentService;
         this.processService = processService;
+        this.lockService = lockService;
     }
 
     @GetMapping("/filtered")
@@ -79,8 +85,13 @@ public class StudentController {
             @RequestParam String enrollment,
             @RequestParam String processStatus) {
 
+        Integer operatorId = AuthHelper.getAuthenticatedUserId();
+
+        if(!lockService.acquireLock(enrollment, operatorId)){
+            throw new BusinessException(ErrorCode.ALREADY_UNDER_REVIEW);
+        }
         log.info("Operador ID [{}] consultó la informacion de la matrícula [{}] para revisión en estado [{}]",
-                AuthHelper.getAuthenticatedUserId(), enrollment, processStatus);
+                operatorId, enrollment, processStatus);
 
         return ResponseEntity.ok(studentService.dataToReview(enrollment, processStatus));
     }
